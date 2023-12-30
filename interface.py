@@ -22,8 +22,8 @@ def process_destination():
     route_calculator.calculate_shortest_path()
     p1 = "Narva mnt. 18, Tartu, Estonia"
     p2 = "Tehase 21, Tartu, Estonia"
-    r_before, route, r_after = route_calculator.calculate_route(p1, p2, share)
-    route_calculator.plot_routes([r_before, route, r_after])
+    route = route_calculator.calculate_route(p1, p2, share)
+    route_calculator.plot_routes(route)
     # Display the plot on a Tkinter window
     canvas = FigureCanvasTkAgg(plt.gcf(), master=root)
     canvas.draw()

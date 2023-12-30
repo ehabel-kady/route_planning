@@ -14,14 +14,11 @@ import matplotlib.pyplot as plt
 
 class HandleCycleData:
     def __init__(self, city="Tartu"):
-        self.city = ox.features_from_place(
-            f"{city}, Estonia", tags={"name": f"{city} linn", "type": "boundary"}
-        )
+        self.city = ox.features_from_place(f"{city}, Estonia", tags = {'name': f'{city} linn', 'type': 'boundary'})
         self.city_graph = None
         self.nodes, self.edges, self.filtered_edges = None, None, None
-
     def check(self, highway):
-        cycle = ["cycleway"]
+        cycle = ['cycleway']
         if isinstance(highway, list):
             return any(value in highway for value in cycle)
         else:
@@ -29,14 +26,14 @@ class HandleCycleData:
 
     def get_cycling_data(self):
         self.city = self.city.query("name == 'Tartu linn' and admin_level == '9'")
-        self.crs_web = pyproj.CRS.from_epsg("3857")
-        self.crs_gps = pyproj.CRS.from_epsg("4326")
+        self.crs_web = pyproj.CRS.from_epsg('3857')
+        self.crs_gps = pyproj.CRS.from_epsg('4326')
 
         polygon = unary_union(list(self.city.to_crs(crs=self.crs_gps).geometry))
         self.city_graph = ox.graph_from_polygon(polygon)
 
         self.nodes, self.edges = ox.graph_to_gdfs(self.city_graph)
-        self.mask = self.edges["highway"].apply(self.check)
+        self.mask = self.edges['highway'].apply(self.check)
         self.filtered_edges = self.edges[self.mask]
         return self.filtered_edges, polygon
 
@@ -44,9 +41,8 @@ class HandleCycleData:
         temp = ox.graph_from_gdfs(self.nodes, self.filtered_edges)
         tartu_cyclable = self.city_graph.edge_subgraph(temp.edges)
 
-        fig, ax = ox.plot_graph(
-            tartu_cyclable, node_size=3, edge_color="blue", figsize=(14, 14)
-        )
+        fig, ax = ox.plot_graph(tartu_cyclable, node_size = 3, edge_color = 'blue', figsize=(14,14))
+
 
 
 class BikeData:
